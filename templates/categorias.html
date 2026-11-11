@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block contenido %}
+<div class="card">
+  <h2>{{ "Editar categoría" if item else "Nueva categoría" }}</h2>
+  <form class="datos" method="post"
+        action="{{ url_for('editar_categoria', id=item.id) if item else url_for('categorias') }}">
+    <label>Nombre <input name="nombre" required value="{{ item.nombre if item else '' }}"></label>
+    <label>Descripción <input name="descripcion" value="{{ item.descripcion or '' if item else '' }}"></label>
+    <button type="submit">{{ "Actualizar" if item else "Guardar" }}</button>
+    {% if item %}<a class="boton" href="{{ url_for('categorias') }}">Cancelar</a>{% endif %}
+  </form>
+</div>
+<div class="card">
+  <h2>Categorías</h2>
+  <table>
+    <tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Productos</th><th>Acciones</th></tr>
+    {% for c in lista %}
+    <tr>
+      <td>{{ c.id }}</td><td>{{ c.nombre }}</td><td>{{ c.descripcion or '' }}</td>
+      <td>{{ c.productos|length }}</td>
+      <td class="acciones">
+        <a class="boton" href="{{ url_for('editar_categoria', id=c.id) }}">Editar</a>
+        <form method="post" action="{{ url_for('eliminar_categoria', id=c.id) }}">
+          <button class="eliminar" type="submit">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No hay categorías registradas</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

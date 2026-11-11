@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StockOps</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f8; color: #222; }
+    header { background: #1f3a5f; color: #fff; padding: 14px 30px; display: flex; align-items: center; gap: 30px; }
+    header h1 { margin: 0; font-size: 22px; }
+    nav a { color: #fff; text-decoration: none; margin-right: 18px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 1000px; margin: 25px auto; padding: 0 20px; }
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    h2 { margin-top: 0; color: #1f3a5f; }
+    form.datos { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+    label { display: flex; flex-direction: column; font-size: 13px; gap: 4px; }
+    input, select { padding: 7px; border: 1px solid #bbb; border-radius: 4px; }
+    button { padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; background: #1f3a5f; color: #fff; }
+    button.eliminar { background: #c0392b; }
+    a.boton { padding: 6px 12px; border-radius: 4px; background: #e2a400; color: #fff; text-decoration: none; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 9px; border-bottom: 1px solid #ddd; text-align: left; font-size: 14px; }
+    th { background: #eef2f7; }
+    td.acciones { display: flex; gap: 6px; }
+    .mensaje { background: #dff0d8; color: #2d6a2d; padding: 10px 15px; border-radius: 4px; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>StockOps</h1>
+    <nav>
+      <a href="{{ url_for('productos') }}">Productos</a>
+      <a href="{{ url_for('categorias') }}">Categorías</a>
+      <a href="{{ url_for('proveedores') }}">Proveedores</a>
+    </nav>
+  </header>
+  <main>
+    {% for mensaje in get_flashed_messages() %}
+      <div class="mensaje">{{ mensaje }}</div>
+    {% endfor %}
+    {% block contenido %}{% endblock %}
+  </main>
+</body>
+</html>
