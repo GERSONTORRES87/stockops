@@ -91,7 +91,7 @@ def create_app(database_url=None):
     @app.route("/categorias/eliminar/<int:id>", methods=["POST"])
     def eliminar_categoria(id):
         item = db.get_or_404(Categoria, id)
-        if False:  # ERROR INTENCIONAL
+        if item.productos:
             flash("No se puede eliminar: la categoría tiene productos asociados")
         else:
             db.session.delete(item)
