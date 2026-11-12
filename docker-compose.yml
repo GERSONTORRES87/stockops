@@ -1,0 +1,50 @@
+services:
+  # ---------- Base de datos MySQL ----------
+  db:
+    image: mysql:8.0
+    container_name: stockops-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: stockops
+      MYSQL_USER: stockops
+      MYSQL_PASSWORD: stockops123
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  # ---------- Aplicación Flask ----------
+  app:
+    build: .
+    image: stockops:latest
+    container_name: stockops-app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://stockops:stockops123@db:3306/stockops?charset=utf8mb4
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ---------- phpMyAdmin (ver la BD desde la web) ----------
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: stockops-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: stockops
+      PMA_PASSWORD: stockops123
+    ports:
+      - "8082:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
